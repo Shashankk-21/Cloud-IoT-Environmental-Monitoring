@@ -1,28 +1,13 @@
-# System architecture
+# System Architecture
+
+The system follows an edge-to-cloud architecture in which the Raspberry Pi collects environmental measurements from the BME280 sensor and publishes them to an MQTT broker hosted on AWS EC2. A Python bridge stores the incoming measurements in InfluxDB, while a Node.js/Express API exposes the latest reading to the React dashboard.
 
 ```mermaid
 flowchart LR
-    S[BME280 Sensor]\n    -->|I2C| P[Raspberry Pi 3B\nPython Publisher]
-
-    P -->|MQTT over TCP\nweather/station1/data| M[Amazon EC2\nMosquitto Broker]
-
-    M -->|MQTT Subscribe| B[bridge.py]
-    B -->|Write points| D[(InfluxDB\nweather / sensor_readings)]
-
-    D -->|Query latest reading| A[Node.js + Express API\n/api/data :5000]
-
-    A -->|HTTP JSON| F[React Dashboard]
-    D --> G[Grafana :3000]
-```
-
-## Data path
-
-1. The BME280 measures temperature, humidity, and pressure.
-2. The Raspberry Pi reads the sensor over I2C.
-3. Python serializes the measurements as JSON.
-4. Paho MQTT publishes the JSON payload to `weather/station1/data`.
-5. Mosquitto on AWS EC2 receives and routes the MQTT message.
-6. `bridge.py` subscribes to the topic and writes the values into InfluxDB.
-7. The Node.js/Express API queries the latest InfluxDB record.
-8. The React dashboard polls the API and displays the telemetry.
-9. Grafana can query the same InfluxDB database for independent visualization.
+    S[BME280 Sensor] -->|I2C| P[Raspberry Pi 3B]
+    P -->|MQTT| M[Mosquitto MQTT Broker]
+    M -->|Subscribe| B[bridge.py]
+    B -->|Write measurements| I[InfluxDB]
+    I -->|Query latest data| A[Node.js / Express API]
+    A -->|HTTP JSON| R[React Dashboard]
+    I -->|Visualization| G[Grafana]
