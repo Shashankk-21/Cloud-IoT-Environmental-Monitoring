@@ -1,0 +1,2 @@
+qwiic_bme280
+paho-mqtt==1.6.1

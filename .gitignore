@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Frontend build
+frontend/dist/
+frontend/.vite/
+
+# Local/editor files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets / cloud credentials
+*.pem
+*.key
+*.crt
+*.p12
+credentials.json
+
+# Local runtime/logs
+*.log
+
+# Generated screenshots/data
+*.sqlite
+*.db

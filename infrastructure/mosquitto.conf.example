@@ -1,0 +1,4 @@
+# Demo configuration for the project.
+# For production, use authenticated MQTT clients and TLS.
+listener 1883
+allow_anonymous true
